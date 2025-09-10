@@ -54,7 +54,7 @@ const AdminDashboard = () => {
 
     setIsSaving(true);
     try {
-      const res = await fetch(`${API_URL}/applications/${id}`, {
+      const res = await fetch(`${API_URL}/api/applications/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editData),
@@ -78,7 +78,7 @@ const AdminDashboard = () => {
 
   const handleAccept = async (id) => {
     try {
-      const res = await fetch(`${API_URL}/applications/${id}/accept`, {
+      const res = await fetch(`${API_URL}/api/applications/${id}/accept`, {
         method: "PUT",
       });
       if (!res.ok) throw new Error();
