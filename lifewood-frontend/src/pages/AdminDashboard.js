@@ -135,13 +135,13 @@ const AdminDashboard = () => {
     )
     .filter(
       (app) =>
-        app.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        app.email.toLowerCase().includes(searchTerm.toLowerCase())
+        (app.fullName || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (app.email || "").toLowerCase().includes(searchTerm.toLowerCase())
     )
     .sort((a, b) => {
       if (!sortConfig.key) return 0;
-      const aValue = a[sortConfig.key];
-      const bValue = b[sortConfig.key];
+      const aValue = a[sortConfig.key] || "";
+      const bValue = b[sortConfig.key] || "";
 
       if (aValue < bValue) return sortConfig.direction === "asc" ? -1 : 1;
       if (aValue > bValue) return sortConfig.direction === "asc" ? 1 : -1;
@@ -215,7 +215,7 @@ const AdminDashboard = () => {
                       <td key={field} className="p-2 border">
                         {editingId === app._id
                           ? renderInput(field, field === "age" ? "number" : "text")
-                          : app[field]}
+                          : app[field] || ""}
                       </td>
                     )
                   )}
