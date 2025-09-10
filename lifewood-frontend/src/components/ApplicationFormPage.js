@@ -1,32 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { API_URL } from "../api/api";
 
 function ApplicationFormPage() {
   const [formData, setFormData] = useState({
-    fullName: '',
-    age: '',
-    degree: '',
-    experience: '',
-    email: '',
-    projectId: '',
+    fullName: "",
+    age: "",
+    degree: "",
+    experience: "",
+    email: "",
+    projectId: "",
   });
 
   const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   // ✅ Hardcoded project data (instead of from backend)
   const projects = [
-    { _id: '64a5f64cfcc2d7a1a5e3a101', name: 'AI Research Assistant' },
-    { _id: '64a5f64cfcc2d7a1a5e3a102', name: 'Data Annotation Tool' },
-    { _id: '64a5f64cfcc2d7a1a5e3a103', name: 'Financial Sentiment Analyzer' },
-    { _id: '64a5f64cfcc2d7a1a5e3a104', name: 'Healthcare NLP Pipeline' },
-    { _id: '64a5f64cfcc2d7a1a5e3a105', name: 'Smart Document Scanner' },
+    { _id: "64a5f64cfcc2d7a1a5e3a101", name: "AI Research Assistant" },
+    { _id: "64a5f64cfcc2d7a1a5e3a102", name: "Data Annotation Tool" },
+    { _id: "64a5f64cfcc2d7a1a5e3a103", name: "Financial Sentiment Analyzer" },
+    { _id: "64a5f64cfcc2d7a1a5e3a104", name: "Healthcare NLP Pipeline" },
+    { _id: "64a5f64cfcc2d7a1a5e3a105", name: "Smart Document Scanner" },
   ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     if (submitted) setSubmitted(false);
-    if (error) setError('');
+    if (error) setError("");
   };
 
   const handleSubmit = async (e) => {
@@ -35,9 +36,9 @@ function ApplicationFormPage() {
     const selectedProject = projects.find((p) => p._id === formData.projectId);
 
     try {
-      const response = await fetch(`https://lifewood-deploynment.onrender.com`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch(`${API_URL}/applications`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           fullName: formData.fullName,
           age: formData.age,
@@ -45,25 +46,23 @@ function ApplicationFormPage() {
           experience: formData.experience,
           email: formData.email,
           project: formData.projectId,
-          projectName: selectedProject?.name || '', // ✅ required by backend
+          projectName: selectedProject?.name || "",
         }),
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to submit application');
-      }
+      if (!response.ok) throw new Error("Failed to submit application");
 
       setSubmitted(true);
       setFormData({
-        fullName: '',
-        age: '',
-        degree: '',
-        experience: '',
-        email: '',
-        projectId: '',
+        fullName: "",
+        age: "",
+        degree: "",
+        experience: "",
+        email: "",
+        projectId: "",
       });
     } catch {
-      setError('Something went wrong. Please try again.');
+      setError("Something went wrong. Please try again.");
     }
   };
 

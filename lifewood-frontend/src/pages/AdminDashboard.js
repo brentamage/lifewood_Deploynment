@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { API_URL } from "../api/api";
 
 const AdminDashboard = () => {
   const [applications, setApplications] = useState([]);
@@ -11,9 +12,6 @@ const AdminDashboard = () => {
   const [filterStatus, setFilterStatus] = useState("ALL");
   const [searchTerm, setSearchTerm] = useState("");
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
-
-  // ✅ Use environment variable (default to localhost if not set)
-  const API_URL = process.env.REACT_APP_API_URL || "https://lifewood-deploynment.onrender.com";
 
   useEffect(() => {
     const fetchApplications = async () => {
@@ -32,7 +30,7 @@ const AdminDashboard = () => {
     };
 
     fetchApplications();
-  }, [API_URL]);
+  }, []);
 
   const handleChange = (e) => {
     setEditData({ ...editData, [e.target.name]: e.target.value });
@@ -192,24 +190,19 @@ const AdminDashboard = () => {
           <table className="w-full border-collapse border border-gray-300 text-sm">
             <thead className="bg-gray-100">
               <tr>
-                {[
-                  "fullName",
-                  "age",
-                  "degree",
-                  "experience",
-                  "email",
-                  "projectName",
-                ].map((field) => (
-                  <th
-                    key={field}
-                    className="p-2 border cursor-pointer"
-                    onClick={() => handleSort(field)}
-                  >
-                    {field.charAt(0).toUpperCase() + field.slice(1)}{" "}
-                    {sortConfig.key === field &&
-                      (sortConfig.direction === "asc" ? "▲" : "▼")}
-                  </th>
-                ))}
+                {["fullName", "age", "degree", "experience", "email", "projectName"].map(
+                  (field) => (
+                    <th
+                      key={field}
+                      className="p-2 border cursor-pointer"
+                      onClick={() => handleSort(field)}
+                    >
+                      {field.charAt(0).toUpperCase() + field.slice(1)}{" "}
+                      {sortConfig.key === field &&
+                        (sortConfig.direction === "asc" ? "▲" : "▼")}
+                    </th>
+                  )
+                )}
                 <th className="p-2 border">Status</th>
                 <th className="p-2 border">Actions</th>
               </tr>
@@ -217,20 +210,15 @@ const AdminDashboard = () => {
             <tbody>
               {filteredApplications.map((app) => (
                 <tr key={app._id} className="hover:bg-gray-50">
-                  {[
-                    "fullName",
-                    "age",
-                    "degree",
-                    "experience",
-                    "email",
-                    "projectName",
-                  ].map((field) => (
-                    <td key={field} className="p-2 border">
-                      {editingId === app._id
-                        ? renderInput(field, field === "age" ? "number" : "text")
-                        : app[field]}
-                    </td>
-                  ))}
+                  {["fullName", "age", "degree", "experience", "email", "projectName"].map(
+                    (field) => (
+                      <td key={field} className="p-2 border">
+                        {editingId === app._id
+                          ? renderInput(field, field === "age" ? "number" : "text")
+                          : app[field]}
+                      </td>
+                    )
+                  )}
                   <td className="p-2 border text-yellow-700 font-semibold">
                     {app.status || "PENDING"}
                   </td>
