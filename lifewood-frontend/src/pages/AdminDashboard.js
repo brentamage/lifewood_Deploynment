@@ -12,26 +12,27 @@ const AdminDashboard = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
-  // ✅ Hardcoded localhost API
-  const API_URL = "http://localhost:5000";
+  // ✅ Use environment variable (default to localhost if not set)
+  const API_URL = process.env.REACT_APP_API_URL || "https://lifewood-deploynment.onrender.com";
 
   useEffect(() => {
     const fetchApplications = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`${API_URL}/api/applications`);
+        const res = await fetch(`${API_URL}/applications`);
         if (!res.ok) throw new Error("Failed to fetch applications");
         const data = await res.json();
         setApplications(data);
       } catch (err) {
         toast.error("Error loading applications");
+        console.error(err);
       } finally {
         setLoading(false);
       }
     };
 
     fetchApplications();
-  }, []);
+  }, [API_URL]);
 
   const handleChange = (e) => {
     setEditData({ ...editData, [e.target.name]: e.target.value });
@@ -55,7 +56,7 @@ const AdminDashboard = () => {
 
     setIsSaving(true);
     try {
-      const res = await fetch(`${API_URL}/api/applications/${id}`, {
+      const res = await fetch(`${API_URL}/applications/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editData),
@@ -79,7 +80,7 @@ const AdminDashboard = () => {
 
   const handleAccept = async (id) => {
     try {
-      const res = await fetch(`${API_URL}/api/applications/${id}/accept`, {
+      const res = await fetch(`${API_URL}/applications/${id}/accept`, {
         method: "PUT",
       });
       if (!res.ok) throw new Error();
@@ -99,7 +100,7 @@ const AdminDashboard = () => {
     if (!window.confirm("Are you sure you want to delete this application?"))
       return;
     try {
-      const res = await fetch(`${API_URL}/api/applications/${id}`, {
+      const res = await fetch(`${API_URL}/applications/${id}`, {
         method: "DELETE",
       });
       if (!res.ok) throw new Error();
