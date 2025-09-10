@@ -17,7 +17,7 @@ const AdminDashboard = () => {
     const fetchApplications = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`${API_URL}/applications`);
+        const res = await fetch(`${API_URL}/api/applications`);
         if (!res.ok) throw new Error("Failed to fetch applications");
         const data = await res.json();
         setApplications(data);
