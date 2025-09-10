@@ -36,19 +36,19 @@ function ApplicationFormPage() {
     const selectedProject = projects.find((p) => p._id === formData.projectId);
 
     try {
-      const response = await fetch(`${API_URL}/applications`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fullName: formData.fullName,
-          age: formData.age,
-          degree: formData.degree,
-          experience: formData.experience,
-          email: formData.email,
-          project: formData.projectId,
-          projectName: selectedProject?.name || "",
-        }),
-      });
+      const response = await fetch(`${API_URL}/api/applications`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    fullName: formData.fullName,
+    age: formData.age,
+    degree: formData.degree,
+    experience: formData.experience,
+    email: formData.email,
+    project: formData.projectId,
+    projectName: selectedProject?.name || "",
+  }),
+});
 
       if (!response.ok) throw new Error("Failed to submit application");
 
