@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const Application = require('../models/applications');
+const Application = require('../models/application'); // ✅ fixed filename
 const { sendEmail } = require('../utils/mailer');
 
 // GET all applications
@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
     const applications = await Application.find();
     res.json(applications);
   } catch (err) {
-    console.error('Error fetching applications:', err.message);
+    console.error('❌ Error fetching applications:', err.message);
     res.status(500).json({ error: 'Failed to fetch applications' });
   }
 });
@@ -78,7 +78,7 @@ router.put('/:id/accept', async (req, res) => {
   }
 });
 
-// PUT /api/applications/:id/decline - Decline an application
+// PUT /api/applications/:id/decline - Reject an application
 router.put('/:id/decline', async (req, res) => {
   try {
     const application = await Application.findById(req.params.id);
@@ -86,10 +86,10 @@ router.put('/:id/decline', async (req, res) => {
       return res.status(404).json({ error: 'Application not found' });
     }
 
-    application.status = 'DECLINED';
+    application.status = 'REJECTED'; // ✅ fixed to match schema
     await application.save();
 
-    // Send a decline email to the applicant
+    // Send rejection email
     const subject = 'Application Status Update';
     const message = `Hi ${application.fullName},\n\nThank you for your interest. We regret to inform you that your application for "${application.projectName}" has not been accepted at this time.\n\nWe wish you the best in your future endeavors.\n\nBest regards,\nYour Team`;
 
@@ -97,8 +97,8 @@ router.put('/:id/decline', async (req, res) => {
 
     res.json(application);
   } catch (error) {
-    console.error('❌ Error declining application:', error.message);
-    res.status(500).json({ error: 'Failed to decline application' });
+    console.error('❌ Error rejecting application:', error.message);
+    res.status(500).json({ error: 'Failed to reject application' });
   }
 });
 
@@ -108,15 +108,17 @@ router.put('/:id', async (req, res) => {
     const { fullName, age, degree, experience, email, projectName, status } = req.body;
 
     const updatedApp = await Application.findByIdAndUpdate(
-      req.params.id, {
+      req.params.id,
+      {
         fullName,
         age,
         degree,
         experience,
         email,
         projectName,
-        status, // Ensure status is included in the update
-      }, { new: true } // return updated document
+        status,
+      },
+      { new: true } // return updated document
     );
 
     if (!updatedApp) {
@@ -129,7 +131,6 @@ router.put('/:id', async (req, res) => {
     res.status(500).json({ error: 'Failed to update application' });
   }
 });
-
 
 // DELETE /api/applications/:id - Delete an application
 router.delete('/:id', async (req, res) => {
