@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const Application = require('../models/application'); // ✅ fixed filename
+const Application = require('../models/applications'); // ✅ fixed filename
 const { sendEmail } = require('../utils/mailer');
 
 // GET all applications
