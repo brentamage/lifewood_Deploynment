@@ -98,7 +98,7 @@ const AdminDashboard = () => {
     if (!window.confirm("Are you sure you want to delete this application?"))
       return;
     try {
-      const res = await fetch(`${API_URL}/applications/${id}`, {
+      const res = await fetch(`${API_URL}/api/applications/${id}`, {
         method: "DELETE",
       });
       if (!res.ok) throw new Error();
